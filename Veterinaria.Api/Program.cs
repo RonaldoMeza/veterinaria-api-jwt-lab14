@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using veterinaria_api.Models;
+using Veterinaria.Datos;
+using Veterinaria.Negocio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,11 @@ var connectionString = builder.Configuration.GetConnectionString("Veterinaria")
         "No se configuró la cadena de conexión 'ConnectionStrings:Veterinaria'. Use User Secrets o una variable de entorno.");
 
 builder.Services.AddDbContext<VeterinariaContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped<IPropietarioRepositorio, PropietarioRepositorio>();
+builder.Services.AddScoped<IMascotaRepositorio, MascotaRepositorio>();
+builder.Services.AddScoped<IPropietarioServicio, PropietarioServicio>();
+builder.Services.AddScoped<IMascotaServicio, MascotaServicio>();
+builder.Services.AddAutoMapper(_ => { }, typeof(MappingProfile).Assembly);
 
 var allowedOrigin = builder.Configuration["Cors:AllowedOrigin"] ?? "http://localhost:3000";
 builder.Services.AddCors(options => options.AddPolicy("Frontend", policy => policy
