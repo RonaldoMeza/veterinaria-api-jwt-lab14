@@ -1,4 +1,4 @@
--- Laboratorio 12: Sistema de gestión de veterinaria.
+-- Laboratorios 12-14: Sistema de gestión de veterinaria con autenticación JWT.
 -- Ejecución local: abrir este archivo en SSMS, conectarse a
 -- DESKTOP-7S1EHKS\SQLEXPRESS con Windows Authentication y ejecutar todo.
 -- Para una base de datos en la nube, omitir el bloque CREATE DATABASE/USE
@@ -58,6 +58,22 @@ BEGIN
 END;
 GO
 
+IF OBJECT_ID(N'dbo.Usuarios', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Usuarios
+    (
+        IdUsuario INT IDENTITY(1, 1) NOT NULL,
+        Correo     NVARCHAR(120) NOT NULL,
+        ClaveHash  VARCHAR(100) NOT NULL,
+        Rol        NVARCHAR(30) NOT NULL,
+
+        CONSTRAINT PK_Usuarios PRIMARY KEY (IdUsuario),
+        CONSTRAINT UQ_Usuarios_Correo UNIQUE (Correo),
+        CONSTRAINT CK_Usuarios_Rol CHECK (Rol IN (N'Recepcionista', N'Veterinario'))
+    );
+END;
+GO
+
 IF NOT EXISTS
 (
     SELECT 1
@@ -92,7 +108,23 @@ BEGIN
 END;
 GO
 
+-- Usuarios exclusivos para pruebas académicas locales.
+-- Ambos hashes corresponden a la clave de prueba: Admin123!
+IF NOT EXISTS (SELECT 1 FROM dbo.Usuarios WHERE Correo = N'recepcionista@veterinaria.com')
+BEGIN
+    INSERT INTO dbo.Usuarios (Correo, ClaveHash, Rol)
+    VALUES (N'recepcionista@veterinaria.com', '$2a$11$YZ7MxkTbnkbYQyCm16jPZOPqzU1/pw3BaElZ1FVsae1DOnuVjPB0q', N'Recepcionista');
+END;
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Usuarios WHERE Correo = N'veterinario@veterinaria.com')
+BEGIN
+    INSERT INTO dbo.Usuarios (Correo, ClaveHash, Rol)
+    VALUES (N'veterinario@veterinaria.com', '$2a$11$YZ7MxkTbnkbYQyCm16jPZOPqzU1/pw3BaElZ1FVsae1DOnuVjPB0q', N'Veterinario');
+END;
+GO
+
 -- Verificación no destructiva.
 SELECT * FROM dbo.Propietarios ORDER BY IdPropietario;
 SELECT * FROM dbo.Mascotas ORDER BY IdMascota;
+SELECT IdUsuario, Correo, Rol FROM dbo.Usuarios ORDER BY IdUsuario;
 GO

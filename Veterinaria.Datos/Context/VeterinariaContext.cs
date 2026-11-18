@@ -7,6 +7,7 @@ public partial class VeterinariaContext(DbContextOptions<VeterinariaContext> opt
 {
     public virtual DbSet<Mascota> Mascotas { get; set; }
     public virtual DbSet<Propietario> Propietarios { get; set; }
+    public virtual DbSet<Usuario> Usuarios { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,6 +37,15 @@ public partial class VeterinariaContext(DbContextOptions<VeterinariaContext> opt
             entity.Property(e => e.Telefono).HasMaxLength(20);
             entity.Property(e => e.Correo).HasMaxLength(120);
             entity.Property(e => e.Direccion).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(e => e.IdUsuario);
+            entity.HasIndex(e => e.Correo, "UQ_Usuarios_Correo").IsUnique();
+            entity.Property(e => e.Correo).HasMaxLength(120);
+            entity.Property(e => e.ClaveHash).HasMaxLength(100).IsUnicode(false);
+            entity.Property(e => e.Rol).HasMaxLength(30);
         });
     }
 }

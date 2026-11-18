@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Veterinaria.Entidades.DTOs;
 using Veterinaria.Negocio.Excepciones;
@@ -7,6 +8,7 @@ namespace Veterinaria.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PropietariosController(IPropietarioServicio servicio) : ControllerBase
 {
     [HttpGet]
@@ -27,6 +29,7 @@ public class PropietariosController(IPropietarioServicio servicio) : ControllerB
     }
 
     [HttpPost]
+    [Authorize(Roles = "Recepcionista")]
     public async Task<ActionResult<PropietarioDto>> Post(PropietarioCrearDto dto)
     {
         try
@@ -41,6 +44,7 @@ public class PropietariosController(IPropietarioServicio servicio) : ControllerB
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = "Recepcionista")]
     public async Task<IActionResult> Put(int id, PropietarioActualizarDto dto)
     {
         try
@@ -52,6 +56,7 @@ public class PropietariosController(IPropietarioServicio servicio) : ControllerB
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Recepcionista")]
     public async Task<IActionResult> Delete(int id)
     {
         try

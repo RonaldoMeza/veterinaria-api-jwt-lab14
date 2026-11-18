@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Veterinaria.Entidades.DTOs;
 using Veterinaria.Negocio.Servicios.Interfaces;
@@ -6,9 +7,11 @@ namespace Veterinaria.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class MascotasController(IMascotaServicio servicio) : ControllerBase
 {
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<MascotaDto>>> Get(string? especie, string? nombre) => Ok(await servicio.ListarAsync(especie, nombre));
 
     [HttpGet("{id:int}")]
@@ -19,6 +22,7 @@ public class MascotasController(IMascotaServicio servicio) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Recepcionista")]
     public async Task<ActionResult<MascotaDto>> Post(MascotaCrearDto dto)
     {
         try
@@ -30,6 +34,7 @@ public class MascotasController(IMascotaServicio servicio) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = "Recepcionista,Veterinario")]
     public async Task<IActionResult> Put(int id, MascotaActualizarDto dto)
     {
         try
@@ -40,5 +45,6 @@ public class MascotasController(IMascotaServicio servicio) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Recepcionista")]
     public async Task<IActionResult> Delete(int id) => await servicio.EliminarAsync(id) ? NoContent() : NotFound();
 }
