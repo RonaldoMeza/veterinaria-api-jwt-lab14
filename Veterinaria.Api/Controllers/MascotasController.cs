@@ -1,3 +1,44 @@
-using Microsoft.AspNetCore.Mvc; using Veterinaria.Entidades; using Veterinaria.Negocio;
+using Microsoft.AspNetCore.Mvc;
+using Veterinaria.Entidades.DTOs;
+using Veterinaria.Negocio.Servicios.Interfaces;
+
 namespace Veterinaria.Api.Controllers;
-[ApiController][Route("api/[controller]")] public class MascotasController(IMascotaServicio s):ControllerBase { [HttpGet] public async Task<ActionResult<IEnumerable<MascotaDto>>> Get(string? especie,string? nombre)=>Ok(await s.ListarAsync(especie,nombre)); [HttpGet("{id:int}")] public async Task<ActionResult<MascotaDto>> Get(int id)=>await s.ObtenerAsync(id) is { } x?Ok(x):NotFound(); [HttpPost] public async Task<ActionResult<MascotaDto>> Post(MascotaCrearDto d){try{var x=await s.CrearAsync(d);return CreatedAtAction(nameof(Get),new{id=x.IdMascota},x);}catch(ArgumentException e){return BadRequest(e.Message);}} [HttpPut("{id:int}")] public async Task<IActionResult> Put(int id,MascotaActualizarDto d){try{return await s.ActualizarAsync(id,d)?NoContent():NotFound();}catch(ArgumentException e){return BadRequest(e.Message);}} [HttpDelete("{id:int}")] public async Task<IActionResult> Delete(int id)=>await s.EliminarAsync(id)?NoContent():NotFound(); }
+
+[ApiController]
+[Route("api/[controller]")]
+public class MascotasController(IMascotaServicio servicio) : ControllerBase
+{
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<MascotaDto>>> Get(string? especie, string? nombre) => Ok(await servicio.ListarAsync(especie, nombre));
+
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<MascotaDto>> Get(int id)
+    {
+        var mascota = await servicio.ObtenerAsync(id);
+        return mascota is null ? NotFound() : Ok(mascota);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<MascotaDto>> Post(MascotaCrearDto dto)
+    {
+        try
+        {
+            var mascota = await servicio.CrearAsync(dto);
+            return CreatedAtAction(nameof(Get), new { id = mascota.IdMascota }, mascota);
+        }
+        catch (ArgumentException ex) { return BadRequest(ex.Message); }
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Put(int id, MascotaActualizarDto dto)
+    {
+        try
+        {
+            return await servicio.ActualizarAsync(id, dto) ? NoContent() : NotFound();
+        }
+        catch (ArgumentException ex) { return BadRequest(ex.Message); }
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id) => await servicio.EliminarAsync(id) ? NoContent() : NotFound();
+}

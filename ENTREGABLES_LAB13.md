@@ -8,7 +8,7 @@ Rama del laboratorio: https://github.com/RonaldoMeza/veterinaria-api-lab12/tree/
 
 ## Capturas de arquitectura
 1. Abrir `Veterinaria.slnx` y capturar los cuatro proyectos: `Veterinaria.Entidades`, `Veterinaria.Datos`, `Veterinaria.Negocio` y `Veterinaria.Api`.
-2. Capturar `Veterinaria.Negocio/Negocio.cs`, mostrando `MappingProfile` completo.
+2. Capturar `Veterinaria.Negocio/Mapeos/MappingProfile.cs`, mostrando `MappingProfile` completo.
 3. Capturar las referencias: Api → Negocio → Datos → Entidades.
 
 ## Sustentación de MappingProfile

@@ -1,7 +1,11 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Veterinaria.Datos;
-using Veterinaria.Negocio;
+using Veterinaria.Datos.Context;
+using Veterinaria.Datos.Repositorios;
+using Veterinaria.Datos.Repositorios.Interfaces;
+using Veterinaria.Negocio.Mapeos;
+using Veterinaria.Negocio.Servicios;
+using Veterinaria.Negocio.Servicios.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
