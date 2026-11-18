@@ -11,7 +11,7 @@ El registro público asigna siempre `Recepcionista`; el cliente nunca elige su r
 
 ## Repositorio
 
-- URL: **pendiente de crear/configurar el repositorio del Laboratorio 14**.
+- URL: https://github.com/RonaldoMeza/veterinaria-api-jwt-lab14
 
 ## Matriz de permisos
 
@@ -118,4 +118,4 @@ Si el registro aceptara el rol enviado por el cliente, una persona podría regis
 - [x] Secreto JWT configurado mediante User Secrets.
 - [x] Verificación automática de códigos 200, 201, 204, 400, 401, 403, 404 y 409.
 - [ ] Pruebas Swagger y capturas realizadas manualmente.
-- [ ] Repositorio GitHub del Laboratorio 14 configurado y publicado.
+- [x] Repositorio GitHub del Laboratorio 14 configurado y publicado.
